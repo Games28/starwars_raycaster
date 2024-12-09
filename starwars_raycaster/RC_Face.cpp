@@ -39,6 +39,13 @@ void RC_Face::SetIndex(int nIndex) { nFaceIndex = nIndex; }
 olc::Sprite* RC_Face::GetTexture() { return pSprite; }
 void         RC_Face::SetTexture(olc::Sprite* sprPtr) { pSprite = sprPtr; }
 
+void RC_Face::setPixel(float sX, float sY, olc::Pixel p)
+{
+    pSprite->SetPixel({ (int)sX,(int)sY }, p);
+}
+
+
+
 // per default a face is "just" textured and not animated
 bool RC_Face::IsTextured() { return true; }
 bool RC_Face::IsAnimated() { return false; }
@@ -146,3 +153,5 @@ olc::Pixel RC_FaceAnimated::Sample(float sX, float sY) {
         return pSprite->Sample(fx0, fy0);
     }
 }
+
+

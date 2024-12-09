@@ -1,0 +1,2 @@
+1. create a duplicate of original texture to allow for individual textures per face of any block side to have their pixels modified.
+2. create a boundry to preview where on the texture the pixels will be modified.

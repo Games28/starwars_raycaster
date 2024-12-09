@@ -78,6 +78,10 @@ public:
     olc::Sprite* GetTexture();
     void         SetTexture(olc::Sprite* sprPtr);
 
+
+    void setPixel(float sX, float sY, olc::Pixel p);
+   
+  
     // per default a face is "just" textured and not animated
     virtual bool IsTextured();
     virtual bool IsAnimated();

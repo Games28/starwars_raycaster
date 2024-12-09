@@ -166,26 +166,7 @@ public:
 
     // Holds intersection point in float (world) coordinates and in int (tile) coordinates,
     // the distance to the intersection point and the height of the map at these tile coordinates
-    typedef struct sIntersectInfo {
-        float fHitX,         // world space
-            fHitY;
-        int   nHitX,        // tile space
-            nHitY;
-        float fDistFrnt,     // distances to front and back faces of hit map cell
-            fDistBack;
-        float fHeight;       // height within the layer
-        int   nLayer = -1;   // nLayer == 0 --> ground layer
-
-        // these are on screen projected values (y coordinate in pixel space)
-        int osp_bot_frnt = -1;    // on screen projected bottom  of wall slice
-        int osp_bot_back = -1;    //                     bottom  of wall at back
-        int osp_top_frnt = -1;    //                     ceiling
-        int osp_top_back = -1;    //                     ceiling of wall at back
-
-        int nFaceHit = FACE_UNKNOWN;     // which face was hit?
-        bool bHorizHit;                  // was the hit on a horizontal grid line?
-    } IntersectInfo;
-
+   
     void PrintHitPoint(IntersectInfo& p, bool bVerbose) {
         std::cout << "hit (world): ( " << p.fHitX << ", " << p.fHitY << " ) ";
         std::cout << "hit (tile): ( " << p.nHitX << ", " << p.nHitY << " ) ";

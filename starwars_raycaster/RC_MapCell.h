@@ -3,6 +3,7 @@
 
 #include "RC_Face.h"
 
+
 //////////////////////////////////  MAP CELL BLUEPRINTS  //////////////////////////////////////
 
 /* For faces and map cells you can define blueprints, that are used to build up the map. So the face blueprints are the
@@ -14,6 +15,44 @@
  */
 
  // ==============================/  definition of MapCellBluePrint  /==============================
+
+typedef struct sWallDismantleInfo
+{
+    int x, y;
+    float depth;
+    olc::Pixel p;
+    int wallhitX, wallhitY, faceID;
+
+}wallDismantalinfo;
+
+
+class WallDismantle
+{
+public:
+    WallDismantle() = default;
+    ~WallDismantle() = default;
+
+    void prepboundry(int screenwidth, int walltop, int wallbottom);
+    bool outsideboundry(int pixel_x, int pixel_y);
+    bool withinboundry(int pixel_x, int pixel_y);
+    void addWalldismantle(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p);
+    bool isdismantled(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p);
+    int getboundrywidth();
+    int getboundryheight();
+
+private:
+    int walldimension = 20;
+    int middleheight;
+    int middlewidth;
+    int top, bottom,
+        left, right;
+
+    std::vector<wallDismantalinfo*> walldismantleList;
+};
+
+
+
+
 
  // A "MapCellBluePrint" object is a combination of
  //   + a character identifying that map cell in the map definition
@@ -83,6 +122,9 @@ public:
     // if not overriden, this is an empty block and sampling always returns olc::BLANK
     virtual olc::Pixel Sample(int nFaceIx, float sX, float sY);
 
+    //change pixel color of sprite test
+    void SetTexturePixel(int nFaceIx, float sX, float sY, olc::Pixel p);
+
     char GetID();
     void SetID(char cID);
 
@@ -99,6 +141,9 @@ public:
     RC_Face* GetFacePtr(int nFaceIx);
 
     virtual bool IsDynamic();
+
+    //test
+    std::vector<wallDismantalinfo*> walldismantleList;
 };
 
 // ==============================/  class RC_MapCellDynamic  /==============================

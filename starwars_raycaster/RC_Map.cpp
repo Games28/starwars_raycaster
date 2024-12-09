@@ -84,6 +84,11 @@ void RC_Map::AddLayer(const std::string& sUserMap, std::vector<olc::Sprite*> vWa
                     }
                     else {
                         RC_Face* pFacePtr = new RC_Face;
+                        //duplicate texture for modifying test
+                        olc::Sprite* tempsprite = auxSpritePtr;
+                        auxSpritePtr = nullptr;
+                        auxSpritePtr = tempsprite->Duplicate();
+
                         pFacePtr->Init(i, auxSpritePtr, refFace.bTransparent);
                         pMapCellPtr->SetFacePtr(i, pFacePtr);
                     }
@@ -227,34 +232,4 @@ bool RC_Map::Collides(float fX, float fY, float fH, float fR, float fVX, float f
     return bResult;
 }
 
-void WallDismantle::prepboundry(int screenwidth, int walltop, int wallbottom)
-{
-    int wallheight = wallbottom - walltop;
-    middleheight = wallheight / 2;
-    middlewidth = screenwidth / 2;
 
-    top = middleheight - walldimension;
-    bottom = middleheight + walldimension;
-    left = middlewidth - walldimension;
-    right = middlewidth + walldimension;
-
-}
-
-bool WallDismantle::withinboundry(int pixel_x, int pixel_y)
-{
-    if (pixel_x >= left && pixel_x <= right &&
-        pixel_y >= top && pixel_y <= bottom)
-    {
-        return true;
-    }
-    else
-    {
-
-        return false;
-    }
-}
-
-void WallDismantle::addWalldismantle(int x, int y, float depth, int hitX, int hitY)
-{
-
-}

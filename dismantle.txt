@@ -1,0 +1,83 @@
+void WallDismantle::prepboundry(int screenwidth, int walltop, int wallbottom)
+{
+    int wallheight = wallbottom - walltop;
+    middleheight = wallheight / 2;
+    middlewidth = screenwidth / 2;
+
+    top = middleheight - walldimension;
+    bottom = middleheight + walldimension;
+    left = middlewidth - walldimension;
+    right = middlewidth + walldimension;
+
+}
+
+bool WallDismantle::outsideboundry(int pixel_x, int pixel_y)
+{
+    if (pixel_x >= left && pixel_x <= right &&
+        pixel_y >= top && pixel_y <= bottom)
+    {
+        return false;
+    }
+    else
+    {
+
+        return true;
+    }
+}
+
+bool WallDismantle::withinboundry(int pixel_x, int pixel_y)
+{
+    if (pixel_x >= left && pixel_x <= right &&
+        pixel_y >= top && pixel_y <= bottom)
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
+}
+
+void WallDismantle::addWalldismantle(int x, int y, float depth, int hitX, int hitY, int facehit, olc::Pixel p)
+{
+    wallDismantalinfo* dismantle = new wallDismantalinfo();
+    dismantle->depth = depth;
+    dismantle->x = x;
+    dismantle->y = y;
+    dismantle->wallhitX = hitX;
+    dismantle->wallhitY = hitY;
+    dismantle->faceHit = facehit;
+    dismantle->p = p;
+
+    walldismantleList.push_back(dismantle);
+}
+
+bool WallDismantle::isdismantled(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p)
+{
+    for (int i = 0; i < walldismantleList.size(); i++)
+    {
+        wallDismantalinfo* dismantle = walldismantleList[i];
+
+        if (dismantle->x == x && dismantle->y == x &&
+            dismantle->depth == depth &&
+            dismantle->wallhitX == hitX &&  dismantle->wallhitY == hitY &&
+            dismantle->faceHit == faceside && dismantle->p == p)
+        {
+            return true;
+            break;
+        }
+    }
+   
+    return false;
+}
+
+void WallDismantle::Draw(RC_DepthDrawer& ddraw)
+{
+    for (auto& dismantle : walldismantleList)
+    {
+       
+            ddraw.Draw(dismantle->depth, dismantle->x, dismantle->y, dismantle->p);
+        
+   }
+}

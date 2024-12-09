@@ -71,6 +71,11 @@ olc::Pixel RC_MapCell::Sample(int nFaceIx, float sX, float sY) {
     return pFaces[nFaceIx]->Sample(sX, sY);
 }
 
+void RC_MapCell::SetTexturePixel(int nFaceIx, float sX, float sY,olc::Pixel p)
+{
+    pFaces[nFaceIx]->setPixel(sX, sY, p);
+}
+
 char RC_MapCell::GetID() { return id; }
 void RC_MapCell::SetID(char cID) { id = cID; }
 
@@ -157,3 +162,63 @@ bool RC_MapCellDynamic::IsEmpty() { return bEmpty; }
 
 bool RC_MapCellDynamic::IsDynamic() { return true; }
 
+void WallDismantle::prepboundry(int screenwidth, int walltop, int wallbottom)
+{
+    int wallheight = wallbottom - walltop;
+    middleheight = wallheight / 2;
+    middlewidth = screenwidth / 2;
+
+    top = middleheight - walldimension;
+    bottom = middleheight + walldimension;
+    left = middlewidth - walldimension;
+    right = middlewidth + walldimension;
+
+}
+
+bool WallDismantle::outsideboundry(int pixel_x, int pixel_y)
+{
+    if (pixel_x >= left && pixel_x <= right &&
+        pixel_y >= top && pixel_y <= bottom)
+    {
+        return false;
+    }
+    else
+    {
+
+        return true;
+    }
+
+}
+
+bool WallDismantle::withinboundry(int pixel_x, int pixel_y)
+{
+    if (pixel_x >= left && pixel_x <= right &&
+        pixel_y >= top && pixel_y <= bottom)
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
+}
+
+void WallDismantle::addWalldismantle(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p)
+{
+}
+
+bool WallDismantle::isdismantled(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p)
+{
+    return false;
+}
+
+int WallDismantle::getboundrywidth()
+{
+    return right - left;
+}
+
+int WallDismantle::getboundryheight()
+{
+    return bottom - top;
+}

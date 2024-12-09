@@ -19,35 +19,7 @@
 
 
 
-typedef struct sWallDismantleInfo
-{
-    int x, y;
-    float depth;
-    olc::Pixel p = olc::BLANK;
-    int wallhitX, wallhitY;
 
-}wallDismantalinfo;
-
-
-class WallDismantle
-{
-public:
-    WallDismantle() = default;
-    ~WallDismantle() = default;
-
-    void prepboundry(int screenwidth, int walltop, int wallbottom);
-    bool withinboundry(int pixel_x, int pixel_y);
-    void addWalldismantle(int x, int y, float depth, int hitX, int hitY);
-
-private:
-    int walldimension = 8;
-    int middleheight;
-    int middlewidth;
-    int top, bottom,
-        left, right;
-
-    std::vector<wallDismantalinfo*> walldismantleList;
-};
 
 
  // ==============================/  class RC_Map  /==============================

@@ -256,6 +256,9 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
         int x, y;       // screen coordinates
         float depth;    // for depth drawing
         olc::Pixel p;
+
+        //test
+        int hitX, hitY, faceHit;
     } DelayedPixel;
     std::vector<DelayedPixel> vRenderLater;
 
@@ -472,9 +475,10 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
 
                 if (i == (vHitPointList.size() - 1) && nMapCellLevel == 0)
                 {
-                    map->walldismantle.prepboundry(pge->ScreenWidth(), ( pge->ScreenHeight() / 2 ) - nWallTop, (pge->ScreenHeight() / 2) + nWallBot);
+                   map->walldismantle.prepboundry(pge->ScreenWidth(), ( pge->ScreenHeight() / 2 ) - nWallTop, (pge->ScreenHeight() / 2) + nWallBot);
                    
                 }
+
                 // render wall segment
                 float fSampleX = -1.0f;
                 for (int y = nWallTop; y <= nWallBot; y++) {
@@ -505,46 +509,51 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
 
                     // render or store for later rendering, depending on the map cell type
                     RC_Face* auxFacePtr = auxMapCellPtr->GetFacePtr(nFaceHit);
-
-                   
-
-                    if (auxFacePtr->IsTransparent()) {
-                      
+                    
+                    
+                  
+                    if (!auxFacePtr->IsTransparent())
+                    {
                         if (map->walldismantle.withinboundry(x, y))
                         {
-                            //if (wallSample != olc::BLANK)
-                            {
-                                DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], olc::BLANK };
-                                vRenderLater.push_back(aux);
+                           
 
-                            }
+                            olc::Pixel wallsample = wallSample;
+                            wallsample.a = 150;
+                            ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallsample);
                         }
                         else
                         {
-                       
-                            DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], wallSample };
-                            vRenderLater.push_back(aux);
+
+                            
+                            ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
                         }
                     }
-                    else 
+                    else
                     {
-                      
-                      
-                            ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
-                          
-                    }
-                  
-                    
-                    if (map->walldismantle.withinboundry(x, y))
-                    {
-                        wallSample.a = 150;
-                        ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
+                        if (map->walldismantle.outsideboundry(x, y))
+                        {
+                            
+                            DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], wallSample ,nX_hit,nY_hit,nFaceHit };
+                            vRenderLater.push_back(aux);
+                            
+                           
+                        }
+                        else
+                        {
+                            if (pge->GetKey(olc::K).bPressed)
+                            {
+                               // auxFacePtr->SetTransparent(true);
+                                auxMapCellPtr->SetTexturePixel(nFaceHit, fSampleX, fSampleY, olc::BLANK);
+                            }
+                        }  
                     }
 
+                   
                   
 
                 }
-               
+             
                
                 // render ceiling segment if it's visible
                 for (int y = nWallBot + 1; y <= nWallBot2; y++) {
@@ -564,18 +573,15 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
         
         if (elt.p != olc::BLANK) 
         {
-           // if (map->walldismantle.withinboundry(elt.x, elt.y))
-           // {
-           //     elt.p.a = 150;
-           //     ddraw.Draw(elt.depth, elt.x, elt.y, elt.p);
-           // }
-           // else
-            {
-                ddraw.Draw(elt.depth, elt.x, elt.y, elt.p);
-            }
+
+           ddraw.Draw(elt.depth, elt.x, elt.y, elt.p);
             
+          
         }
+
     }
+
+   
 }
 
 
