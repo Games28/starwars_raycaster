@@ -50,6 +50,13 @@ void RC_ObjectManager::initailize(RC_Map& map)
 
 void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& map, RC_DepthDrawer& ddraw, float deltatime)
 {
+
+	if (map.walldismantle.chunkinfo.samplecoords.size() != 0)
+	{
+		createWallobject(map);
+		map.walldismantle.ClearChunkinfo();
+	}
+	
 	wallCollision(map, deltatime);
 	if (heldObject == nullptr)
 	{
@@ -80,7 +87,7 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 	if (pge->GetKey(olc::SPACE).bReleased)
 	{
 		
-		heldObject->IsStationary(false);
+		//heldObject->IsStationary(false);
 		
 		heldObject = nullptr;
 		
@@ -89,9 +96,9 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 
 	  if(heldObject != nullptr)
 		{
-		  
-			power.tkMove(*heldObject, player,map);
-			power.tkRotation(*heldObject, player, map);
+   		  power.distancecontrols(pge,*heldObject,player,map,deltatime);
+		  power.TKpower(*heldObject, player, map, deltatime);
+		
 		}
 		
 	
@@ -135,4 +142,60 @@ void RC_ObjectManager::wallCollision(RC_Map& map, float deltatime)
 			}
 		}
 	}
+}
+
+void RC_ObjectManager::createWallobject(RC_Map& map)
+{
+	olc::Sprite* tempspr = map.walldismantle.chunkinfo.sprite->Duplicate();
+
+	for (int y = 0; y < tempspr->height; y++)
+	{
+		for (int x = 0; x < tempspr->width; x++)
+		{
+
+
+			tempspr->SetPixel(x, y, olc::MAGENTA);
+
+
+
+		}
+	}
+
+	for (auto Spr : map.walldismantle.chunkinfo.samplecoords)
+	{
+		for (int y = 0; y < tempspr->height; y++)
+		{
+			for (int x = 0; x < tempspr->width; x++)
+			{
+
+				
+				int samplex = Spr.x * tempspr->width;
+				int sampley = Spr.y * tempspr->height;
+
+				if (x == samplex && y == sampley)
+				{
+					tempspr->SetPixel(x, y, map.walldismantle.chunkinfo.sprite->GetPixel(samplex, sampley));
+				}
+				
+				
+				
+			}
+		}
+	}
+
+	RC_Object* tempobj = new RC_Object();
+	tempobj->setPos({ map.walldismantle.chunkinfo.mapX - 0.2f,map.walldismantle.chunkinfo.mapY - 0.2f});
+	tempobj->SetScale(1.0);
+	tempobj->SetSprite(tempspr);
+	tempobj->SetDistToPlayer(-1.0f);
+	tempobj->SetAngleToPlayer(0.0f);
+	tempobj->SetDecal();
+	tempobj->IsAnimated(false);
+	tempobj->IsBillboarded(true);
+	tempobj->IsStationary(true);
+	//if (!blueprint.isStationary) { tempobj->Setvel({ 2.0,2.0 }); }
+
+	tempobj->setRadius(0.5f);
+	objectlist.push_back(tempobj);
+	
 }

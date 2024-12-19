@@ -41,7 +41,9 @@ void         RC_Face::SetTexture(olc::Sprite* sprPtr) { pSprite = sprPtr; }
 
 void RC_Face::setPixel(float sX, float sY, olc::Pixel p)
 {
-    pSprite->SetPixel({ (int)sX,(int)sY }, p);
+    int Swidth = sX * pSprite->width;
+    int Sheight = sY * pSprite->height;
+    pSprite->SetPixel({ Swidth,Sheight }, p);
 }
 
 

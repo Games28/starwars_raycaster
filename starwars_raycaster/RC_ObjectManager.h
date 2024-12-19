@@ -21,6 +21,7 @@ public:
 
     void wallCollision(RC_Map& map, float deltatime);
 
+    void createWallobject(RC_Map& map);
 private:
     Powers power;
 	std::vector<RC_Object*> objectlist;

@@ -76,9 +76,14 @@ void RC_Map::AddLayer(const std::string& sUserMap, std::vector<olc::Sprite*> vWa
                     case TYPE_FACE_ROOF: auxSpritePtr = vRoofTextures[refFace.nFaceIndex]; break;
                     default: std::cout << "ERROR: AddLayer() --> face type unknown: " << refFace.nFaceType << std::endl;
                     }
+
+                    
                     // if this face is an animated type face, we need to create a different type RC_Face for it
                     if (refFace.bAnimated) {
                         RC_FaceAnimated* pFacePtr = new RC_FaceAnimated;
+                        olc::Sprite* tempsprite = auxSpritePtr;
+                        auxSpritePtr = nullptr;
+                        auxSpritePtr = tempsprite->Duplicate();
                         pFacePtr->Init(i, auxSpritePtr, refFace.bTransparent, ANIM_STATE_CLOSED, 32, 32);
                         pMapCellPtr->SetFacePtr(i, pFacePtr);
                     }

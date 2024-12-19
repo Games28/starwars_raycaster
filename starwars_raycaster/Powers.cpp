@@ -1,4 +1,5 @@
 #include "Powers.h"
+#include <iostream>
 
 Powers::Powers()
 {
@@ -50,11 +51,14 @@ bool Powers::isinsight(RC_Object& object, Player& player, float fov, float& angl
 	return abs(ModuloTwoPI(fAligneda + 3.14159f) - angle2player) < fov;
 }
 
-void Powers::TKpower(RC_Object& object, Player& player, RC_Map& map)
+void Powers::TKpower(RC_Object& object, Player& player, RC_Map& map,float deltatime)
 {
+	
+	tkMove(object, player, map);
+	tkRotation(object, player, map,deltatime);
 }
 
-void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map)
+void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map, float deltatime)
 {
   	auto Deg2Rad = [=](float angle) { return angle / 180.0f * 3.14159f; };
 
@@ -73,9 +77,14 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map)
 	float vx = distance * (cosf(angle_player_to_object + angledifrad) - cosf(angle_player_to_object));
 	float vy = distance * (sinf(angle_player_to_object + angledifrad) - sinf(angle_player_to_object));
     
+	vx + 5.0f;
+	vy + 5.0f;
 	
 	float newX = object.getPos().x + vx;
 	float newY = object.getPos().y + vy;
+
+	std::cout << "newx: " << newX << std::endl;
+	//std::cout << "newy: " << newY << std::endl;
 
 	if (!map.Collides(newX, object.getPos().y, object.getRadius(), object.getRadius(),
 		vx, vy))
@@ -86,12 +95,13 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map)
 	else
 	{ 
 		//////////////////////////////////////////////////////////////////////////////////
-		difference_y = (object.getPos().y - 1.0f) - player.fPlayerY;
-		distance = sqrtf(difference_x * difference_x + difference_y * difference_y);
 		
-		vy = distance * (sinf(angle_player_to_object + angledifrad) - sinf(angle_player_to_object));
-		newY = object.getPos().y + vy;
-		object.SetY(newY);
+		
+		//distance -= 0.2f;
+		//vy = distance * (sinf(angle_player_to_object + angledifrad) - sinf(angle_player_to_object));
+		//newY = object.getPos().y + vy * deltatime;
+		//object.SetY(newY);
+		//object.setX(newX - 0.2f);
 		//////////////////////////////////////////////////////////////////////////////////////
 		
 	}
@@ -105,11 +115,12 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map)
 	else
 	{
 		///////////////////////////////////////////////////////////////////////////////////////
-		difference_x = (object.getPos().x - 1.0f) - player.fPlayerX;
-		distance = sqrtf(difference_x * difference_x + difference_y * difference_y);
-		vx = distance * (cosf(angle_player_to_object + angledifrad) - cosf(angle_player_to_object));
-		newX = object.getPos().x + vx;
-		object.setX(newX);
+		
+		//distance -= 0.2f;
+		//vx = distance * (cosf(angle_player_to_object + angledifrad) - cosf(angle_player_to_object));
+		//newX = object.getPos().x + vx * deltatime;
+		//object.setX(newX);
+		//object.SetY(newY - 0.2f);
 		////////////////////////////////////////////////////////////////////////////////
 	}
 
@@ -133,4 +144,36 @@ void Powers::setinsight(bool sight)
 {
 	insight = sight;
 }
+
+void Powers::distancecontrols(olc::PixelGameEngine* pge, RC_Object& object, 
+	Player& player, RC_Map& map, float deltatime)
+{
+
+	float fNewX = object.getPos().x;
+	float fNewY = object.getPos().y;
+	float fSpeedUp = 1.0f;
+
+	if (pge->GetKey(olc::O).bHeld)
+	{
+		fNewX += lu_cos(player.fPlayerA_deg) * SPEED_MOVE * fSpeedUp * deltatime;
+		fNewY += lu_sin(player.fPlayerA_deg) * SPEED_MOVE * fSpeedUp * deltatime;
+	}	
+
+	if (pge->GetKey(olc::L).bHeld)
+	{
+		fNewX -= lu_cos(player.fPlayerA_deg) * SPEED_MOVE * fSpeedUp * deltatime;
+		fNewY -= lu_sin(player.fPlayerA_deg) * SPEED_MOVE * fSpeedUp * deltatime;
+	}
+	
+
+	
+	if (!map.Collides(fNewX, fNewY, 0.5f, 0.5f, 0.0f, 0.0f)) {
+		
+		object.setPos({ fNewX,fNewY });
+	}// walk backwards
+
+	
+}
+
+
 

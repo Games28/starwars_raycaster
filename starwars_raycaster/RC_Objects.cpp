@@ -77,6 +77,7 @@ void RC_Object::Setvel(olc::vf2d vel)
 
 void RC_Object::IsStationary(bool stationary)
 {
+   
     isStationary = stationary;
 }
 

@@ -204,14 +204,26 @@ bool WallDismantle::withinboundry(int pixel_x, int pixel_y)
     }
 }
 
-void WallDismantle::addWalldismantle(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p)
+void WallDismantle::addChunkinfo(float sampleX, float sampleY, float mapx, float mapy, olc::Sprite* spr)
 {
+    if (chunkinfo.mapX == 0.0f) chunkinfo.mapX = mapx;
+    if (chunkinfo.mapY == 0.0f) chunkinfo.mapY = mapy;
+    if (chunkinfo.sprite == nullptr) chunkinfo.sprite = spr;
+    olc::vf2d coords = { sampleX,sampleY };
+    chunkinfo.samplecoords.push_back(coords);
 }
 
-bool WallDismantle::isdismantled(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p)
+void WallDismantle::ClearChunkinfo()
 {
-    return false;
+    chunkinfo.mapX = 0.0f;
+    chunkinfo.mapY = 0.0f;
+    chunkinfo.samplecoords.clear();
+    chunkinfo.sprite = nullptr;
 }
+
+
+
+
 
 int WallDismantle::getboundrywidth()
 {
@@ -221,4 +233,10 @@ int WallDismantle::getboundrywidth()
 int WallDismantle::getboundryheight()
 {
     return bottom - top;
+}
+
+void WallDismantle::abjustboundrysize(olc::PixelGameEngine* pge)
+{
+    if (pge->GetKey(olc::LEFT).bHeld) walldimension += 0.2f;
+    if (pge->GetKey(olc::RIGHT).bHeld) walldimension -= 0.2f;
 }

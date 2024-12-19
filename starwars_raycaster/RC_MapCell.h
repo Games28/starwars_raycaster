@@ -16,14 +16,13 @@
 
  // ==============================/  definition of MapCellBluePrint  /==============================
 
-typedef struct sWallDismantleInfo
+typedef struct sWallChunkInfo
 {
-    int x, y;
-    float depth;
-    olc::Pixel p;
-    int wallhitX, wallhitY, faceID;
+    std::vector<olc::vf2d> samplecoords;
+    float mapX, mapY;
+    olc::Sprite* sprite = nullptr;
 
-}wallDismantalinfo;
+}wallChunkinfo;
 
 
 class WallDismantle
@@ -35,19 +34,23 @@ public:
     void prepboundry(int screenwidth, int walltop, int wallbottom);
     bool outsideboundry(int pixel_x, int pixel_y);
     bool withinboundry(int pixel_x, int pixel_y);
-    void addWalldismantle(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p);
-    bool isdismantled(int x, int y, float depth, int hitX, int hitY, int faceside, olc::Pixel p);
+    void addChunkinfo(float sampleX, float sampleY,float mapx, float mapy, olc::Sprite* spr);
+    void ClearChunkinfo();
+    
+
+   
     int getboundrywidth();
     int getboundryheight();
-
+    void abjustboundrysize(olc::PixelGameEngine* pge);
+    wallChunkinfo chunkinfo;
 private:
-    int walldimension = 20;
+    float walldimension = 5.0f;
     int middleheight;
     int middlewidth;
     int top, bottom,
         left, right;
 
-    std::vector<wallDismantalinfo*> walldismantleList;
+    
 };
 
 
@@ -142,8 +145,7 @@ public:
 
     virtual bool IsDynamic();
 
-    //test
-    std::vector<wallDismantalinfo*> walldismantleList;
+  
 };
 
 // ==============================/  class RC_MapCellDynamic  /==============================

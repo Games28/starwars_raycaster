@@ -257,11 +257,11 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
         float depth;    // for depth drawing
         olc::Pixel p;
 
-        //test
-        int hitX, hitY, faceHit;
+        
     } DelayedPixel;
     std::vector<DelayedPixel> vRenderLater;
 
+    map->walldismantle.abjustboundrysize(pge);
    
 
     // iterate over all screen slices, processing the screen in columns
@@ -473,11 +473,11 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                     ddraw.Draw(fRenderDistance / fHeightAngleCos[y], x, y, roofSample);
                 }
 
-                if (i == (vHitPointList.size() - 1) && nMapCellLevel == 0)
-                {
-                   map->walldismantle.prepboundry(pge->ScreenWidth(), ( pge->ScreenHeight() / 2 ) - nWallTop, (pge->ScreenHeight() / 2) + nWallBot);
-                   
-                }
+               if (i == (vHitPointList.size() - 1) && nMapCellLevel == 0)
+               {
+                  map->walldismantle.prepboundry(pge->ScreenWidth(), ( pge->ScreenHeight() / 2 ) - nWallTop, (pge->ScreenHeight() / 2) + nWallBot);
+                  
+               }
 
                 // render wall segment
                 float fSampleX = -1.0f;
@@ -502,21 +502,57 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                     if (auxMapCellPtr == nullptr) {
                         std::cout << "FATAL ERROR - situation should not occur!!! nullptr map cell ptr detected at (" << nX_hit << ", " << nY_hit << ") layer " << nMapCellLevel << std::endl;
                     }
+                   
+                    RC_Face* auxFacePtr = auxMapCellPtr->GetFacePtr(nFaceHit);
+                    if (i == (vHitPointList.size() - 1))
+                    {
+                        if (map->walldismantle.withinboundry(x, y))
+                        {
+                            if (!auxFacePtr->IsTransparent())
+                            {
+                                if (pge->GetKey(olc::B).bPressed)
+                                {
+                                    auxFacePtr->SetTransparent(true);
+                                   
+                                }
+                               
+                            }
+                            else
+                            {
+
+                               
+                                if (pge->GetKey(olc::K).bPressed)
+                                {
+                                    
+                                    olc::Pixel p = auxMapCellPtr->Sample(nFaceHit, fSampleX, fSampleY);
+                                    map->walldismantle.addChunkinfo(fSampleX, fSampleY,fX_hit,fY_hit, auxFacePtr->GetTexture()->Duplicate());
+                                    auxMapCellPtr->SetPermeable(true);
+                                    auxMapCellPtr->SetTexturePixel(nFaceHit, fSampleX, fSampleY, olc::BLANK);
+                                }
+                            }
+                        }
+                        
+
+                    }
+
+                    
                     // sample that map cell passing the face that was hit and the sample coordinates
                     olc::Pixel sampledPixel = (auxMapCellPtr == nullptr) ? olc::MAGENTA : auxMapCellPtr->Sample(nFaceHit, fSampleX, fSampleY);
                     // shade the pixel
                     olc::Pixel wallSample = ShadePixel(sampledPixel, fFrntDistance);
 
+
+
                     // render or store for later rendering, depending on the map cell type
-                    RC_Face* auxFacePtr = auxMapCellPtr->GetFacePtr(nFaceHit);
-                    
+                   
+                   
                     
                   
                     if (!auxFacePtr->IsTransparent())
                     {
                         if (map->walldismantle.withinboundry(x, y))
                         {
-                           
+
 
                             olc::Pixel wallsample = wallSample;
                             wallsample.a = 150;
@@ -525,7 +561,7 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                         else
                         {
 
-                            
+
                             ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
                         }
                     }
@@ -533,20 +569,16 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                     {
                         if (map->walldismantle.outsideboundry(x, y))
                         {
-                            
-                            DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], wallSample ,nX_hit,nY_hit,nFaceHit };
+
+                            DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], wallSample};
                             vRenderLater.push_back(aux);
+
+
+                        }
+                        
                             
                            
-                        }
-                        else
-                        {
-                            if (pge->GetKey(olc::K).bPressed)
-                            {
-                               // auxFacePtr->SetTransparent(true);
-                                auxMapCellPtr->SetTexturePixel(nFaceHit, fSampleX, fSampleY, olc::BLANK);
-                            }
-                        }  
+                        
                     }
 
                    
