@@ -77,52 +77,37 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map, float de
 	float vx = distance * (cosf(angle_player_to_object + angledifrad) - cosf(angle_player_to_object));
 	float vy = distance * (sinf(angle_player_to_object + angledifrad) - sinf(angle_player_to_object));
     
-	vx + 5.0f;
-	vy + 5.0f;
 	
-	float newX = object.getPos().x + vx;
-	float newY = object.getPos().y + vy;
 
-	std::cout << "newx: " << newX << std::endl;
-	//std::cout << "newy: " << newY << std::endl;
+	float tryX = object.getPos().x + vx;
+    float tryY = object.getPos().y + vy;
 
-	if (!map.Collides(newX, object.getPos().y, object.getRadius(), object.getRadius(),
+	int newX, newY;
+	if (!map.Collides(tryX , object.getPos().y, object.getRadius(), object.getRadius(),
 		vx, vy))
 	{
 		
-		object.setX(newX);
+		newX = tryX;
 	}
 	else
-	{ 
-		//////////////////////////////////////////////////////////////////////////////////
-		
-		
-		//distance -= 0.2f;
-		//vy = distance * (sinf(angle_player_to_object + angledifrad) - sinf(angle_player_to_object));
-		//newY = object.getPos().y + vy * deltatime;
-		//object.SetY(newY);
-		//object.setX(newX - 0.2f);
-		//////////////////////////////////////////////////////////////////////////////////////
-		
+	{
+		newX = object.getPos().x;
 	}
 	
-	if (!map.Collides(object.getPos().x , newY, object.getRadius(), object.getRadius(),
+	
+	if (!map.Collides(object.getPos().x , tryY, object.getRadius(), object.getRadius(),
 		vx, vy))
 	{
 		
-		object.SetY(newY);
+		newY = tryY;
 	}
 	else
 	{
-		///////////////////////////////////////////////////////////////////////////////////////
-		
-		//distance -= 0.2f;
-		//vx = distance * (cosf(angle_player_to_object + angledifrad) - cosf(angle_player_to_object));
-		//newX = object.getPos().x + vx * deltatime;
-		//object.setX(newX);
-		//object.SetY(newY - 0.2f);
-		////////////////////////////////////////////////////////////////////////////////
+		newY = object.getPos().y;
 	}
+	
+	object.setX(newX);
+	object.SetY(newY);
 
 }
 
