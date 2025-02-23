@@ -88,6 +88,7 @@ public:
     // Note that int( fH ) denotes level to check, and (fH - int( fH )) denotes height to check within that level
     // and fR is the radius of the object (considered as a pillar shape)
     bool Collides(float fX, float fY, float fH, float fR, float fVX, float fVY);
+    bool Colliding(float fX, float fY, float fH, float fR);
 };
 
 #endif // RC_MAP_H

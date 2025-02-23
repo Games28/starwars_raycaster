@@ -237,4 +237,26 @@ bool RC_Map::Collides(float fX, float fY, float fH, float fR, float fVX, float f
     return bResult;
 }
 
+bool RC_Map::Colliding(float fX, float fY, float fH, float fR)
+{
+    bool bResult;
+
+   
+
+    if (!IsInBounds(fX, fY) || (fH - fR) < 0.0f) {
+        bResult = true;
+    }
+    else if (fH > NrOfLayers()) {
+        bResult = false;
+    }
+    else {
+        bResult = (
+            CellHeightAt(int(fX), int(fY ), int(fH)) >= (fH - int(fH)) &&
+            !MapCellPtrAt(int(fX), int(fY), int(fH))->IsPermeable()
+            );
+    }
+    return bResult;
+  
+}
+
 

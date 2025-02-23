@@ -73,7 +73,7 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 					{
 						
 						obj->IsStationary(true);
-						
+						power.setHand(1);
 						heldObject = obj;
 						
 						break;
@@ -88,7 +88,7 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 	{
 		
 		//heldObject->IsStationary(false);
-		
+		power.setHand(0);
 		heldObject = nullptr;
 		
 
@@ -97,7 +97,7 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 	  if(heldObject != nullptr)
 		{
    		  power.distancecontrols(pge,*heldObject,player,map,deltatime);
-		  power.TKpower(*heldObject, player, map, deltatime);
+		  power.TKpower(pge,*heldObject, player, map, deltatime);
 		
 		}
 		
@@ -115,6 +115,7 @@ void RC_ObjectManager::Update(olc::PixelGameEngine* pge,Player& player, RC_Map& 
 	{
 		obj->Render(pge,ddraw, player.fPlayerH, player.fPlayerFoV_rad, map.fMaxDistance, nHorizonHeight);
 	}
+	power.drawHands(pge);
 }
 
 void RC_ObjectManager::wallCollision(RC_Map& map, float deltatime)
