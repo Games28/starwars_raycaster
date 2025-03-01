@@ -43,12 +43,17 @@ public:
     int getboundryheight();
     void abjustboundrysize(olc::PixelGameEngine* pge);
     wallChunkinfo chunkinfo;
+    int pixelcount = 0;
+    int maxcount = 0;
 private:
     float walldimension = 5.0f;
     int middleheight;
     int middlewidth;
     int top, bottom,
         left, right;
+
+    
+    
 
     
 };

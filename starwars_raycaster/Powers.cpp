@@ -133,31 +133,31 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map, float de
     
 	
 
-	float tryX = object.getPos().x + vx;
-    float tryY = object.getPos().y + vy;
+	//float tryX = object.getPos().x  + vx;
+    //float tryY = object.getPos().y  + vy;
 
 	std::cout << "object: " << radtodeg << std::endl;
 	std::cout << "player angle: " << player.fPlayerA_deg << std::endl;
 	float newX, newY;
 	
-	if (!map.Collides(tryX , object.getPos().y, object.getRadius(), object.getRadius(),
-		vx, vy))
+	if (!map.Collides(object.getPos().x, object.getPos().y, object.getRadius(), object.getRadius(),
+		vx, 0))
 	{
 		
-		newX = tryX;
+		newX = object.getPos().x + vx;
 	}
 	else
 	{
-		newX = object.getPos().x;
+		newX = object.getPos().x ;
 		player.fPlayerA_deg = radtodeg;
 	}
 	
 	
-	if (!map.Collides(object.getPos().x , tryY, object.getRadius(), object.getRadius(),
-		vx, vy))
+	if (!map.Collides(object.getPos().x , object.getPos().y, object.getRadius(), object.getRadius(),
+		0, vy))
 	{
 		
-	     newY = tryY;
+	     newY = object.getPos().y + vy;
 	}
 	else
 	{
@@ -196,6 +196,7 @@ void Powers::tkMove(RC_Object& object, Player& player, RC_Map& map)
 	else
 	{
 		object.setX(object.getPos().x);
+		player.fPlayerA_deg = radtodeg;
 
 	}
 
@@ -208,6 +209,7 @@ void Powers::tkMove(RC_Object& object, Player& player, RC_Map& map)
 	else
 	{
 		object.SetY(object.getPos().y);
+		player.fPlayerA_deg = radtodeg;
 	}
 }
 

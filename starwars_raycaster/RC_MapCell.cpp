@@ -167,12 +167,14 @@ void WallDismantle::prepboundry(int screenwidth, int walltop, int wallbottom)
     int wallheight = wallbottom - walltop;
     middleheight = wallheight / 2;
     middlewidth = screenwidth / 2;
+    
 
     top = middleheight - walldimension;
     bottom = middleheight + walldimension;
     left = middlewidth - walldimension;
     right = middlewidth + walldimension;
 
+    maxcount = top + bottom + left + right;
 }
 
 bool WallDismantle::outsideboundry(int pixel_x, int pixel_y)
@@ -206,11 +208,15 @@ bool WallDismantle::withinboundry(int pixel_x, int pixel_y)
 
 void WallDismantle::addChunkinfo(float sampleX, float sampleY, float mapx, float mapy, olc::Sprite* spr)
 {
-    if (chunkinfo.mapX == 0.0f) chunkinfo.mapX = mapx;
-    if (chunkinfo.mapY == 0.0f) chunkinfo.mapY = mapy;
-    if (chunkinfo.sprite == nullptr) chunkinfo.sprite = spr;
-    olc::vf2d coords = { sampleX,sampleY };
-    chunkinfo.samplecoords.push_back(coords);
+   
+   
+        if (chunkinfo.mapX == 0.0f) chunkinfo.mapX = mapx;
+        if (chunkinfo.mapY == 0.0f) chunkinfo.mapY = mapy;
+        if (chunkinfo.sprite == nullptr) chunkinfo.sprite = spr;
+        olc::vf2d coords = { sampleX,sampleY };
+        chunkinfo.samplecoords.push_back(coords);
+    
+    
 }
 
 void WallDismantle::ClearChunkinfo()

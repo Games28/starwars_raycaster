@@ -523,11 +523,20 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                                
                                 if (pge->GetKey(olc::K).bPressed)
                                 {
-                                    
-                                    olc::Pixel p = auxMapCellPtr->Sample(nFaceHit, fSampleX, fSampleY);
-                                    map->walldismantle.addChunkinfo(fSampleX, fSampleY,fX_hit,fY_hit, auxFacePtr->GetTexture()->Duplicate());
-                                    auxMapCellPtr->SetPermeable(true);
-                                    auxMapCellPtr->SetTexturePixel(nFaceHit, fSampleX, fSampleY, olc::BLANK);
+                                    map->walldismantle.pixelcount++;
+                                    if (map->walldismantle.pixelcount > map->walldismantle.maxcount)
+                                    {
+                                       map->walldismantle.pixelcount = 0;
+                                    }
+                                    else
+                                    {
+
+
+                                        olc::Pixel p = auxMapCellPtr->Sample(nFaceHit, fSampleX, fSampleY);
+                                        map->walldismantle.addChunkinfo(fSampleX, fSampleY, fX_hit, fY_hit, auxFacePtr->GetTexture()->Duplicate());
+                                        auxMapCellPtr->SetPermeable(true);
+                                        auxMapCellPtr->SetTexturePixel(nFaceHit, fSampleX, fSampleY, olc::BLANK);
+                                    }
                                 }
                             }
                         }
