@@ -108,6 +108,11 @@ void Powers::TKpower(olc::PixelGameEngine* pge,RC_Object& object, Player& player
 	
 	tkMove(object, player, map);
 	tkRotation(object, player, map,deltatime);
+	float difference_x = object.getPos().x - player.fPlayerX;
+	float difference_y = object.getPos().y - player.fPlayerY;
+
+	float angle_player_to_object = atan2f(difference_y, difference_x);
+	pge->DrawString(30, 50, "distanceangle: " + std::to_string(angle_player_to_object));
 	
 }
 
@@ -133,37 +138,46 @@ void Powers::tkRotation(RC_Object& object, Player& player, RC_Map& map, float de
     
 	
 
-	//float tryX = object.getPos().x  + vx;
-    //float tryY = object.getPos().y  + vy;
-
-	std::cout << "object: " << radtodeg << std::endl;
-	std::cout << "player angle: " << player.fPlayerA_deg << std::endl;
-	float newX, newY;
 	
+	
+	float newX, newY;
+
+	//if (!map.Collides(object.getPos().x, object.getPos().y, object.getRadius(), object.getRadius(), vx, vy))
+	//{
+	//	object.setX object.getPos().y + vy;
+	//	newX = object.getPos().x + vx;
+	//}
+	//
+	//object.setX(newX);
+	//object.SetY(newY);
+	//wall sliding code
 	if (!map.Collides(object.getPos().x, object.getPos().y, object.getRadius(), object.getRadius(),
-		vx, 0))
+		vx, vy))
 	{
 		
 		newX = object.getPos().x + vx;
+		newY = object.getPos().y + vy;
 	}
 	else
 	{
-		newX = object.getPos().x ;
-		player.fPlayerA_deg = radtodeg;
-	}
-	
-	
-	if (!map.Collides(object.getPos().x , object.getPos().y, object.getRadius(), object.getRadius(),
-		0, vy))
-	{
-		
-	     newY = object.getPos().y + vy;
-	}
-	else
-	{
+		newX = object.getPos().x;
 		newY = object.getPos().y;
-		player.fPlayerA_deg = radtodeg;
+		//newX = object.getPos().x;
+		//player.fPlayerA_deg = radtodeg;
 	}
+	
+	
+	//if (!map.Collides(object.getPos().x , object.getPos().y, object.getRadius(), object.getRadius(),
+	//	0, vy))
+	//{
+	//	
+	//     newY = object.getPos().y + vy;
+	//}
+	//else
+	//{
+	//	newY = object.getPos().y;//newY = object.getPos().y;
+	//	//player.fPlayerA_deg = radtodeg;
+	//}
 	
 	object.setX(newX);
 	object.SetY(newY);
@@ -188,29 +202,36 @@ void Powers::tkMove(RC_Object& object, Player& player, RC_Map& map)
 
 	float radtodeg = rad2deg(angle_player_to_object);
 
-	if (!map.Collides( newX, object.getPos().y, object.getRadius(), object.getRadius(),
-		player.getMoveDiff().x, player.getMoveDiff().y) && player.backtowall == false) 
-	{
-  		object.setX(newX);
-	}
-	else
-	{
-		object.setX(object.getPos().x);
-		player.fPlayerA_deg = radtodeg;
-
-	}
-
-
-	if (!map.Collides(object.getPos().x, newY, object.getRadius(), object.getRadius(),
+	if (!map.Collides(newX, newY, object.getRadius(), object.getRadius(),
 		player.getMoveDiff().x, player.getMoveDiff().y) && player.backtowall == false)
 	{
+		object.setX(newX);
 		object.SetY(newY);
 	}
-	else
-	{
-		object.SetY(object.getPos().y);
-		player.fPlayerA_deg = radtodeg;
-	}
+
+	//if (!map.Collides( newX, object.getPos().y, object.getRadius(), object.getRadius(),
+	//	player.getMoveDiff().x, player.getMoveDiff().y) && player.backtowall == false) 
+	//{
+  	//	object.setX(newX);
+	//}
+	//else
+	//{
+	//	object.setX(object.getPos().x);
+	//	player.fPlayerA_deg = radtodeg;
+	//
+	//}
+	//
+	//
+	//if (!map.Collides(object.getPos().x, newY, object.getRadius(), object.getRadius(),
+	//	player.getMoveDiff().x, player.getMoveDiff().y) && player.backtowall == false)
+	//{
+	//	object.SetY(newY);
+	//}
+	//else
+	//{
+	//	object.SetY(object.getPos().y);
+	//	player.fPlayerA_deg = radtodeg;
+	//}
 }
 
 bool Powers::getinsight()
@@ -259,40 +280,34 @@ void Powers::distancecontrols(olc::PixelGameEngine* pge, RC_Object& object,
 	float fNewX = object.getPos().x + vx;
 	float fNewY = object.getPos().y + vy;
 
-    //if (!map.Collides(fNewX, object.getPos().y, object.getRadius(), object.getRadius(), vx, vy)) {
-	//
-	//	object.setX(fNewX);
-	//	object.SetY(fNewY);
-	//
-	 //else if (map.Collides(fNewX, object.getPos().y, object.getRadius(), object.getRadius(), vx, vy))
-	 //{
-	//	 object.setX(fNewX);
-	 //}
-	 //else if (map.Collides(object.getPos().x, fNewY, object.getRadius(), object.getRadius(), vx, vy))
-	 //{
-	//	 object.SetY(fNewY);
-	 //}
+    
 
-	if (!map.Collides(fNewX, object.getPos().y, object.getRadius(), object.getRadius(), vx, vy)) {
-		
+	if (!map.Collides(fNewX, fNewY, object.getRadius(), object.getRadius(), vx, vy)) {
+
 		object.setX(fNewX);
-	}
-	else
-	{
-		object.setX(object.getPos().x);
-		player.fPlayerA_deg = radtodeg;
-	}
-	//// walk backwards
-	//										   
-	if (!map.Collides(object.getPos().x, fNewY,  object.getRadius(), object.getRadius(), vx, vy)) {
-	
 		object.SetY(fNewY);
 	}
-	else
-	{
-		object.SetY(object.getPos().y);
-		player.fPlayerA_deg = radtodeg;
-	}// walk backwards
+	//if (!map.Collides(fNewX, object.getPos().y, object.getRadius(), object.getRadius(), vx, vy)) {
+	//	
+	//	object.setX(fNewX); 
+	//	
+	//}
+	//else
+	//{
+	//	object.setX(object.getPos().x);
+	//	player.fPlayerA_deg = radtodeg;
+	//}
+	////// walk backwards
+	////										   
+	//if (!map.Collides(object.getPos().x, fNewY,  object.getRadius(), object.getRadius(), vx, vy)) {
+	//
+	//	object.SetY(fNewY);
+	//}
+	//else
+	//{
+	//	object.SetY(object.getPos().y);
+	//	player.fPlayerA_deg = radtodeg;
+	//}// walk backwards
 	
 }
 

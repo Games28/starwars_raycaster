@@ -31,7 +31,7 @@ public:
     WallDismantle() = default;
     ~WallDismantle() = default;
 
-    void prepboundry(int screenwidth, int walltop, int wallbottom);
+    void prepboundry(olc::PixelGameEngine* pge, int wallheight);
     bool outsideboundry(int pixel_x, int pixel_y);
     bool withinboundry(int pixel_x, int pixel_y);
     void addChunkinfo(float sampleX, float sampleY,float mapx, float mapy, olc::Sprite* spr);

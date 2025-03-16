@@ -31,6 +31,7 @@ public:
 	void setinsight(bool sight);
 	void distancecontrols(olc::PixelGameEngine* pge, RC_Object& object, Player& player, RC_Map& map, float deltatime);
 
+	
 
 
 private:
@@ -43,4 +44,8 @@ private:
 
 #endif // !POWERS_H
 
+class Lightning_power
+{
+public:
 
+};

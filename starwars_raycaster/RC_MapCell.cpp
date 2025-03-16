@@ -162,11 +162,12 @@ bool RC_MapCellDynamic::IsEmpty() { return bEmpty; }
 
 bool RC_MapCellDynamic::IsDynamic() { return true; }
 
-void WallDismantle::prepboundry(int screenwidth, int walltop, int wallbottom)
+void WallDismantle::prepboundry(olc::PixelGameEngine* pge, int wallheight)
 {
-    int wallheight = wallbottom - walltop;
-    middleheight = wallheight / 2;
-    middlewidth = screenwidth / 2;
+    int tophalf = (pge->ScreenHeight() / 2) - (wallheight / 2);
+    int bottomhalf = (pge->ScreenHeight() / 2) + (wallheight / 2);
+    middleheight = (tophalf + bottomhalf) / 2;
+    middlewidth = pge->ScreenWidth() / 2;
     
 
     top = middleheight - walldimension;

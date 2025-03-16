@@ -473,9 +473,9 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                     ddraw.Draw(fRenderDistance / fHeightAngleCos[y], x, y, roofSample);
                 }
 
-               if (i == (vHitPointList.size() - 1) && nMapCellLevel == 0)
+               if (i == (vHitPointList.size() - 1))
                {
-                  map->walldismantle.prepboundry(pge->ScreenWidth(), ( pge->ScreenHeight() / 2 ) - nWallTop, (pge->ScreenHeight() / 2) + nWallBot);
+                  map->walldismantle.prepboundry(pge, nWallBot - nWallTop);
                   
                }
 
@@ -559,24 +559,24 @@ void Raycast::raycaster(olc::PixelGameEngine* pge, RC_DepthDrawer& ddraw, Player
                   
                     if (!auxFacePtr->IsTransparent())
                     {
-                        if (map->walldismantle.withinboundry(x, y))
+                        //if (map->walldismantle.withinboundry(x, y))
                         {
 
 
-                            olc::Pixel wallsample = wallSample;
-                            wallsample.a = 150;
-                            ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallsample);
+                           // olc::Pixel wallsample = wallSample;
+                           // wallsample.a = 150;
+                           ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
                         }
-                        else
+                        //else
                         {
 
 
-                            ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
+                           // ddraw.Draw(fFrntDistance / fHeightAngleCos[y], x, y, wallSample);
                         }
                     }
                     else
                     {
-                        if (map->walldismantle.outsideboundry(x, y))
+                       // if (map->walldismantle.outsideboundry(x, y))
                         {
 
                             DelayedPixel aux = { x, y, fFrntDistance / fHeightAngleCos[y], wallSample};
